@@ -42,7 +42,7 @@ class Engine {
         return txSerialized
     }
 
-    sendERC20Tx(privKey, amount, tokenAbi, tokenAddress, receiverAddress, data) {
+    sendERC20Tx(privKey, amount, tokenAbi, tokenAddress, receiverAddress) {
         const senderAddress = getEthereumAddress(privKey)
         const contract = new web3.eth.Contract(tokenAbi, tokenAddress)
         const bytecode = contract.methods.transfer(receiverAddress, amount).encodeABI()
@@ -59,8 +59,6 @@ class Engine {
         const txSerialized = '0x' + tx.serialize().toString('hex')
         return txSerialized
     }
-
-    
 
 }
 
