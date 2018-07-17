@@ -1,4 +1,4 @@
-const etherscanApiKey = 'IHCAU7EB6GCS37D4B8BPN78M3BUVQMWX13'
+const etherscanApiKey = ''
 const chain = 'rinkeby'
 const timeout = '3000' 
 
