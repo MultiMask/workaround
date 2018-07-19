@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import styled from 'styled-components';
 import "./App.css";
 
+import Web3 from 'web3';
+
+let localWeb3;
+
 class App extends Component {
 
   constructor(props) {
@@ -17,7 +21,7 @@ class App extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  handleCreateTX = () => {
+  handleBTC = () => {
     const tx = {
       network: 'bitcoin',
       to: '1MK2jqUQKnVzRLC79V18pdb3GM3CeAAqG',
@@ -27,6 +31,44 @@ class App extends Component {
 
     window.multiWeb.sendTransaction(tx);
   };
+
+  handleMeta = () => {
+    this.sendByMetaMask();
+  }
+
+  sendByMetaMask() {
+    // eslint-disable-next-line
+    localWeb3 = new Web3(web3.currentProvider);
+    
+    // eslint-disable-next-line
+    const userAccount = web3.eth.defaultAccount;
+
+    localWeb3.eth.sendTransaction({
+      from: userAccount, 
+      to: userAccount, 
+      // eslint-disable-next-line
+      value: web3.toWei(1, "ether")
+    });
+  }
+
+  handleMulti = () => {
+    this.sendByMulti();
+  }
+
+  sendByMulti() {
+    // eslint-disable-next-line
+    localWeb3 = new Web3(web3.currentProvider);
+    
+    // eslint-disable-next-line
+    const userAccount = web3.eth.defaultAccount;
+
+    localWeb3.eth.sendTransaction({
+      from: userAccount, 
+      to: userAccount, 
+      // eslint-disable-next-line
+      value: web3.toWei(1, "ether")
+    });
+  }
 
   get isValidData() {
     return true;
@@ -40,7 +82,15 @@ class App extends Component {
             MultiMask Test
           </Title>
           <Item>
-            <Btn onClick={this.handleCreateTX} disabled={!this.isValidData}>Call</Btn>
+            <div>
+              <Btn onClick={this.handleBTC} disabled={!this.isValidData}>Send BTC TX</Btn>
+            </div>
+            <div>
+              <Btn onClick={this.handleMeta} disabled={!this.isValidData}>ETH by MetaMask</Btn>
+            </div>
+            <div>
+              <Btn onClick={this.handleMulti} disabled={!this.isValidData}>ETH by MultiMask</Btn>
+            </div>
           </Item>
         </Container>
       </Wrapper>
