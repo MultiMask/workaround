@@ -4,7 +4,8 @@ import "./App.css";
 
 import Web3 from 'web3';
 
-let localWeb3;
+let localWeb3,
+  multiWeb3;
 
 class App extends Component {
 
@@ -57,14 +58,16 @@ class App extends Component {
 
   sendByMulti() {
     // eslint-disable-next-line
-    localWeb3 = new Web3(web3.currentProvider);
+    multiWeb3 = new Web3(window.multiWeb.getWeb3Provider());
+    // multiWeb3 = window.multiWeb.getWeb3();
+    // localWeb3 = new Web3(web3.currentProvider);
     
     // eslint-disable-next-line
     const userAccount = web3.eth.defaultAccount;
 
-    localWeb3.eth.sendTransaction({
-      from: userAccount, 
-      to: userAccount, 
+    multiWeb3.eth.sendTransaction({
+      from: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
+      to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
       // eslint-disable-next-line
       value: web3.toWei(1, "ether")
     });
