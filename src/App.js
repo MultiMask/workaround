@@ -37,40 +37,50 @@ class App extends Component {
     this.sendByMetaMask();
   }
 
-  sendByMetaMask() {
+  async sendByMetaMask() {
     // eslint-disable-next-line
     localWeb3 = new Web3(web3.currentProvider);
     
     // eslint-disable-next-line
-    const userAccount = web3.eth.defaultAccount;
+    const userAccount = await localWeb3.eth.getAccounts();
+    // const userAccount = web3.eth.defaultAccount;
 
     localWeb3.eth.sendTransaction({
       from: userAccount, 
-      to: userAccount, 
+      to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
       // eslint-disable-next-line
       value: web3.toWei(1, "ether")
-    });
+    })
+    .on("receipt", function(receipt) {
+      console.log('get receipt', receipt);
+    })
   }
 
   handleMulti = () => {
     this.sendByMulti();
   }
 
-  sendByMulti() {
+  async sendByMulti() {
     // eslint-disable-next-line
     multiWeb3 = new Web3(window.multiWeb.getWeb3Provider());
-    // multiWeb3 = window.multiWeb.getWeb3();
-    // localWeb3 = new Web3(web3.currentProvider);
-    
+
     // eslint-disable-next-line
-    const userAccount = web3.eth.defaultAccount;
+    const userAccount = await multiWeb3.eth.getAccounts();
+    console.log(userAccount);
+    console.log(multiWeb3);
 
     multiWeb3.eth.sendTransaction({
-      from: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
+      from: userAccount[0], 
       to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
       // eslint-disable-next-line
-      value: web3.toWei(1, "ether")
-    });
+      value: multiWeb3.utils.toWei('0.001', "ether")
+    })
+    .on("receipt", function(receipt) {
+      console.log('get receipt', receipt);
+    })
+    .then(txData => {
+      console.log('after then', txData);
+    })
   }
 
   get isValidData() {
