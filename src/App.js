@@ -66,21 +66,25 @@ class App extends Component {
 
     // eslint-disable-next-line
     const userAccount = await multiWeb3.eth.getAccounts();
-    console.log(userAccount);
-    console.log(multiWeb3);
+    // console.log(userAccount);
+    // console.log(multiWeb3);
 
     multiWeb3.eth.sendTransaction({
       from: userAccount[0], 
       to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
       // eslint-disable-next-line
       value: multiWeb3.utils.toWei('0.001', "ether")
+    }, (error, txHash) => {
+      console.log('callback');
+      console.log('error', error);
+      console.log('result', txHash);
     })
-    .on("receipt", function(receipt) {
-      console.log('get receipt', receipt);
-    })
-    .then(txData => {
-      console.log('after then', txData);
-    })
+    // .on("receipt", function(receipt) {
+    //   console.log('get receipt', receipt);
+    // })
+    // .then(txData => {
+    //   console.log('after then', txData);
+    // })
   }
 
   get isValidData() {
