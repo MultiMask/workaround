@@ -26,7 +26,7 @@ class App extends Component {
     const tx = {
       network: 'bitcoin',
       to: '1MK2jqUQKnVzRLC79V18pdb3GM3CeAAqG',
-      amount: 2000 * 1e8,
+      amount: 0.025 * 1e8,
       data: "payload"
     };
 
@@ -73,7 +73,7 @@ class App extends Component {
       from: userAccount[0], 
       to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
       // eslint-disable-next-line
-      value: multiWeb3.utils.toWei('0.001', "ether")
+      value: multiWeb3.utils.toWei('0.025', "ether")
     }, (error, txHash) => {
       console.log('callback');
       console.log('error', error);
