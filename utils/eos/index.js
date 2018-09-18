@@ -4,8 +4,7 @@ const {ecc, Fcbuffer} = Eos.modules;
 
 async function init() {
   // Create Private Key
-  // const privateKey = await ecc.randomKey();
-  const privateKey = '5JUebM8a8Rd29zcppXMCp5N1MkVjysuDW3HJHgWJ3APcmNuU2LH';
+  const privateKey = await ecc.randomKey();
   let public,
     account;
 
