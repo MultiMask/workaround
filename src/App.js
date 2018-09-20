@@ -43,7 +43,7 @@ class App extends Component {
       data: "payload"
     };
 
-    window.multiWeb.sendTransaction(tx);
+    window.multiWeb.btc.send(tx);
   };
 
   handleMeta = () => {
@@ -75,7 +75,7 @@ class App extends Component {
 
   async sendByMulti() {
     // eslint-disable-next-line
-    multiWeb3 = new Web3(window.multiWeb.getWeb3Provider());
+    multiWeb3 = new Web3(window.multiWeb.eth);
 
     // eslint-disable-next-line
     const userAccount = await multiWeb3.eth.getAccounts();
@@ -104,10 +104,12 @@ class App extends Component {
     console.log('start eos scatter');
 
     // eslint-disable-next-line
-    window.eos = scatter.eos(networkEOS, Eos, {
+    const eos = scatter.eos(networkEOS, Eos, {
         chainId: networkEOS.chainId,
         httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
     }, 'http');
+
+    // console.log(eos);
 
     // eslint-disable-next-line
     scatter.suggestNetwork(networkEOS)
@@ -128,14 +130,14 @@ class App extends Component {
           console.log('auth > ', data);
 
           // eslint-disable-next-line
-          return window.eos.transaction({
+          return eos.transaction({
             actions: [
               {
                 account: 'eosio.token',
-            name: 'transfer',
-            authorization: [{
-              actor: currentAccount.name,
-              permission: currentAccount.authority
+                name: 'transfer',
+                authorization: [{
+                  actor: currentAccount.name,
+                  permission: currentAccount.authority
             }],
             data: {
               from: currentAccount.name,
@@ -153,7 +155,31 @@ class App extends Component {
   }
 
   handleEOSMulti = () => {
+    // eslint-disable-next-line
+    const eos = window.multiWeb.eos(networkEOS, Eos, {
+      chainId: networkEOS.chainId,
+      httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
+    }, 'http');
 
+    console.log(eos);
+    return eos.transaction({
+      actions: [
+        {
+          account: 'eosio.token',
+          name: 'transfer',
+          authorization: [{
+            actor: 'ducone',
+            permission: 'owner'
+          }],
+          data: {
+            from: 'ducone',
+            to: 'eosio',
+            quantity: '0.1300 EOS',
+            memo: ''
+          }
+        }
+      ]
+    });
   }
 
   get isValidData() {
