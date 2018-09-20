@@ -1,11 +1,24 @@
 import React, { Component } from "react";
 import styled from 'styled-components';
 import "./App.css";
+import Eos from 'eosjs';
 
 import Web3 from 'web3';
 
+const chainId = '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca';
+const networkEOS = {
+  protocol: 'http',
+  blockchain: 'eos',
+  host: '193.93.219.219',
+  port: 8888,
+  chainId,
+};
+
 let localWeb3,
   multiWeb3;
+
+let identity,
+  currentAccount;
 
 class App extends Component {
 
@@ -87,6 +100,62 @@ class App extends Component {
     // })
   }
 
+  handleEOSScatter = () => {
+    console.log('start eos scatter');
+
+    // eslint-disable-next-line
+    window.eos = scatter.eos(networkEOS, Eos, {
+        chainId: networkEOS.chainId,
+        httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
+    }, 'http');
+
+    // eslint-disable-next-line
+    scatter.suggestNetwork(networkEOS)
+        .then(x => {
+          console.log('suggest network', x);
+          // eslint-disable-next-line
+          return scatter.getIdentity({ accounts: [networkEOS] })
+        })
+        .then(data => {
+          identity = data;
+          currentAccount = identity.accounts[0];
+          console.log(data);
+
+          // eslint-disable-next-line
+          return scatter.authenticate();
+        })
+        .then(data => {
+          console.log('auth > ', data);
+
+          // eslint-disable-next-line
+          return window.eos.transaction({
+            actions: [
+              {
+                account: 'eosio.token',
+            name: 'transfer',
+            authorization: [{
+              actor: currentAccount.name,
+              permission: currentAccount.authority
+            }],
+            data: {
+              from: currentAccount.name,
+              to: 'eosio',
+              quantity: '0.1200 EOS',
+              memo: ''
+            }
+              }
+            ]
+          });
+        })
+        .then(txHash => {
+          console.log('tx hash', txHash);
+        })
+  }
+
+  handleEOSMulti = () => {
+
+  }
+
   get isValidData() {
     return true;
   }
@@ -107,6 +176,12 @@ class App extends Component {
             </div>
             <div>
               <Btn onClick={this.handleMulti} disabled={!this.isValidData}>ETH by MultiMask</Btn>
+            </div>
+            <div>
+              <Btn onClick={this.handleEOSScatter} disabled={!this.isValidData}>EOS by Scatter</Btn>
+            </div>
+            <div>
+              <Btn onClick={this.handleEOSMulti} disabled={!this.isValidData}>EOS by MultiMask</Btn>
             </div>
           </Item>
         </Container>
@@ -131,7 +206,6 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   width: 500px;
-  height: 400px;
   background: #eee;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.35);
   border-radius: 10px;
