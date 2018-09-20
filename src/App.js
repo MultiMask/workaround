@@ -169,7 +169,7 @@ class App extends Component {
           name: 'transfer',
           authorization: [{
             actor: 'ducone',
-            permission: 'owner'
+            permission: 'active'
           }],
           data: {
             from: 'ducone',
@@ -179,7 +179,10 @@ class App extends Component {
           }
         }
       ]
-    });
+    })
+    .then(txHash => {
+      console.log('tx hash', txHash);
+    })
   }
 
   get isValidData() {
