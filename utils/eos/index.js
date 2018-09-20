@@ -4,7 +4,8 @@ const {ecc, Fcbuffer} = Eos.modules;
 
 async function init() {
   // Create Private Key
-  const privateKey = await ecc.randomKey();
+  // const privateKey = await ecc.randomKey();
+  const privateKey = '5JUebM8a8Rd29zcppXMCp5N1MkVjysuDW3HJHgWJ3APcmNuU2LH';
   let public,
     account;
 
@@ -22,7 +23,7 @@ async function init() {
   });
 
   console.log(' -- Interface');
-  console.log(eos);
+  // console.log(eos);
 
   // Network info
   console.log(' -- NETWORK INFO');
@@ -87,8 +88,8 @@ async function init() {
   // console.log(sellcpu);
 
   console.log(' -- 3.1. Send transfer');
-  // const tr = await eos.transfer(account, 'eosio', '0.1000 EOS', '');
-  // console.log(tr);
+  const tr = await eos.transfer(account, 'eosio', '0.1000 EOS', '');
+  console.log(tr);
 }
 
 init();
