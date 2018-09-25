@@ -36,14 +36,22 @@ class App extends Component {
   }
 
   handleBTC = () => {
-    const tx = {
-      network: 'bitcoin',
-      to: '1MK2jqUQKnVzRLC79V18pdb3GM3CeAAqG',
-      amount: 0.025 * 1e8,
-      data: "payload"
-    };
+    const btc = window.multiWeb.btc;
+    
+    btc.getAccounts()
+      .then(accounts => {
 
-    window.multiWeb.btc.send(tx);
+        const tx = {
+          from: accounts[0],
+          to: 'my51mavwxjFgmvu69peTJ9rjgEW9drtGjW',
+          amount: 0.025,
+        };
+    
+        return btc.send(tx);
+      })
+      .then(result => {
+        console.log('tx result', result);
+      })
   };
 
   handleMeta = () => {
