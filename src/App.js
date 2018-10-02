@@ -243,6 +243,8 @@ const Container = styled.div`
   opacity: 0;
   transform: translateY(2.4rem);
   animation: showUp 0.25s cubic-bezier(0.06, 0.67, 0.37, 0.99) forwards;
+
+  padding-bottom: 40px;
 `;
 
 const Title = styled.h1`
@@ -250,7 +252,6 @@ const Title = styled.h1`
   background: #ddd;
   margin: 0;
   padding: 15px 0 30px;
-  margin-bottom: 40px;
 `;
 
 const Item = styled.div`
