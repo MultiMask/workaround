@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import styled from 'styled-components';
 import "./App.css";
-import Eos from 'eosjs';
+import tshirt from './TShirt.png';
 
+import Eos from 'eosjs';
 import Web3 from 'web3';
 
 const chainId = '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca';
@@ -44,7 +45,8 @@ class App extends Component {
         const tx = {
           from: accounts[0],
           to: 'my51mavwxjFgmvu69peTJ9rjgEW9drtGjW',
-          amount: 0.025,
+          amount: 0.0031,
+          data: 'afe023ac-3ced-459d-9915-16e8474467cc'
         };
     
         return btc.send(tx);
@@ -202,25 +204,40 @@ class App extends Component {
       <Wrapper>
         <Container>
           <Title>
-            MultiMask Test
+            Demo
           </Title>
-          <Item>
-            <div>
-              <Btn onClick={this.handleBTC} disabled={!this.isValidData}>Send BTC TX</Btn>
-            </div>
-            <div>
-              <Btn onClick={this.handleMeta} disabled={!this.isValidData}>ETH by MetaMask</Btn>
-            </div>
-            <div>
-              <Btn onClick={this.handleMulti} disabled={!this.isValidData}>ETH by MultiMask</Btn>
-            </div>
-            <div>
-              <Btn onClick={this.handleEOSScatter} disabled={!this.isValidData}>EOS by Scatter</Btn>
-            </div>
-            <div>
-              <Btn onClick={this.handleEOSMulti} disabled={!this.isValidData}>EOS by MultiMask</Btn>
-            </div>
-          </Item>
+          <Content>
+            <Tshirt src={tshirt} />
+            <Description>
+              <div>
+                <h3>
+                  T-Shirt with MultiMask Logo
+                </h3>
+                <div>
+                  <p>
+                    Total: 20$ (0.0031 BTC)
+                  </p>
+                </div>
+              </div>
+              <Item>
+                <div>
+                  <Btn onClick={this.handleBTC} disabled={!this.isValidData}>Buy</Btn>
+                </div>
+                {/* <div>
+                  <Btn onClick={this.handleMeta} disabled={!this.isValidData}>ETH by MetaMask</Btn>
+                </div> */}
+                {/* <div>
+                  <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy</Btn>
+                </div> */}
+                {/* <div>
+                  <Btn onClick={this.handleEOSScatter} disabled={!this.isValidData}>EOS by Scatter</Btn>
+                </div>
+                <div>
+                  <Btn onClick={this.handleEOSMulti} disabled={!this.isValidData}>EOS by MultiMask</Btn>
+                </div> */}
+              </Item>
+            </Description>
+          </Content>
         </Container>
       </Wrapper>
     );
@@ -281,4 +298,17 @@ const Btn = styled.button`
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   background: ${props => props.disabled ? '#bbb' : 'linear-gradient(to right, #734b6d, #42275a)'};
+`;
+
+const Tshirt = styled.img`
+  max-height:300px;
+  border: 1px solid #CCC;
+`;
+
+const Content = styled.div`
+  display: flex;
+`;
+
+const Description = styled.div`
+  margin-left: 20px;
 `;
