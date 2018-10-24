@@ -52,33 +52,24 @@ class App extends Component {
           <Title>
             Demo
           </Title>
-          {!this.state.complete && (
-            <React.Fragment>
-              <Content>
-                <Tshirt src={tshirt} />
-                <Description>
-                      <div>
-                        <h3>
-                          T-Shirt with MultiMask Logo
-                        </h3>
-                        <div>
-                          <p>
-                            Total: <span className='totalCost'>20</span>$ (0.0031 BTC)
-                          </p>
-                        </div>
-                      </div>
-                      <Item>
-                          <Btn onClick={this.toggleModal}>Buy</Btn>
-                      </Item>
-                </Description>
-              </Content>
-            </React.Fragment>
-          )}
-          {this.state.complete && (
-            <TitleRes>
-              Thank you for your purchase
-            </TitleRes>
-          )}
+          <Content>
+            <Tshirt src={tshirt} />
+            <Description>
+                  <div>
+                    <h3>
+                      T-Shirt with MultiMask Logo
+                    </h3>
+                    <div>
+                      <p>
+                        Total: <span className='totalCost'>20</span>$ (0.0031 BTC)
+                      </p>
+                    </div>
+                  </div>
+                  <Item>
+                      <Payment />
+                  </Item>
+            </Description>
+          </Content>
         </Container>
 
         <Modal
@@ -197,10 +188,6 @@ const Title = styled.h1`
   background: #ddd;
   margin: 0;
   padding: 15px 0 30px;
-`;
-
-const TitleRes = styled.h2`
-  text-align: center;
 `;
 
 const Item = styled.div`
