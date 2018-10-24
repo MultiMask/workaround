@@ -5,7 +5,7 @@ import tshirt from './TShirt.png';
 import "./App.css";
 import "antd/dist/antd.css";
 import { Modal } from 'antd';
-import { Steps, Icon } from 'antd';
+import { Input, Steps, Icon, notification } from 'antd';
 const Step = Steps.Step;
 
 
@@ -24,11 +24,23 @@ class App extends Component {
   }
 
   next = () => {
-    this.setState({step: this.state.step + 1});
+    this.setState({step: this.state.step + 1}, () => {
+      window.multiWeb.initGrabber();
+    });
   }
 
   prev = () => {
-    this.setState({step: this.state.step - 1});
+    this.setState({step: this.state.step - 1}, () => {
+      window.multiWeb.initGrabber();
+    });
+  }
+
+  confirm = () => {
+    this.toggleModal();
+    notification['success']({
+      message: 'Order confirmed',
+    });
+    this.setState({ complete: true });
   }
 
   render() {
@@ -40,24 +52,33 @@ class App extends Component {
           <Title>
             Demo
           </Title>
-          <Content>
-            <Tshirt src={tshirt} />
-            <Description>
-              <div>
-                <h3>
-                  T-Shirt with MultiMask Logo
-                </h3>
-                <div>
-                  <p>
-                    Total: 20$ (0.0031 BTC)
-                  </p>
-                </div>
-              </div>
-              <Item>
-                <Btn onClick={this.toggleModal}>Buy</Btn>
-              </Item>
-            </Description>
-          </Content>
+          {!this.state.complete && (
+            <React.Fragment>
+              <Content>
+                <Tshirt src={tshirt} />
+                <Description>
+                      <div>
+                        <h3>
+                          T-Shirt with MultiMask Logo
+                        </h3>
+                        <div>
+                          <p>
+                            Total: <span className='totalCost'>20</span>$ (0.0031 BTC)
+                          </p>
+                        </div>
+                      </div>
+                      <Item>
+                          <Btn onClick={this.toggleModal}>Buy</Btn>
+                      </Item>
+                </Description>
+              </Content>
+            </React.Fragment>
+          )}
+          {this.state.complete && (
+            <TitleRes>
+              Thank you for your purchase
+            </TitleRes>
+          )}
         </Container>
 
         <Modal
@@ -74,26 +95,41 @@ class App extends Component {
 
         <TabContent visible={this.state.step === 0}>
           <div>
-            <input type="text" placeholder="Name:"/>
-            <input type="text" placeholder="Address:"/>
-            <input type="text" placeholder="Email:"/>
+            <Row>
+              <Input type="text" placeholder="Name:"/>
+            </Row>
+            <Row>
+              <Input type="text" placeholder="Address:"/>
+            </Row>
+            <Row>
+              <Input type="text" placeholder="Email:"/>
+            </Row>
           </div>
           <Actions>
             <Btn onClick={this.next}>Next</Btn>
           </Actions>
         </TabContent>
 
-        <TabContent visible={this.state.step === 1}>
+        <TabContent visible={this.state.step === 1} className="cardPayment">
           <div>
             <h2>
               Input card data:
             </h2>
+            <div className="btntab"></div>
 
-            <input type="text" placeholder="Card number" name="cardnumber" />
-            <input type="text" placeholder="Holder name" name="holdername" /> 
-            <input type="text" placeholder="Mounth" name="month"/>
-            <input type="text" placeholder="Yaer" name="year"/>
-            <input type="text" placeholder="CVV" name="cvv"/>
+            <Row>
+              <Input type="text" placeholder="Card number" name="cardnumber" />
+            </Row>
+            <Row>
+              <Input type="text" placeholder="Holder name" name="holdername" /> 
+            </Row>
+            <Row>
+              <Input type="text" placeholder="Mounth" name="month"/>
+              <Input type="text" placeholder="Yaer" name="year"/>
+            </Row>
+            <Row>
+              <Input type="password" placeholder="CVV" name="cvv"/>
+            </Row>
             
           </div>
           <Actions>
@@ -103,9 +139,10 @@ class App extends Component {
         </TabContent>
 
         <TabContent visible={this.state.step === 2}>
-          <Payment />
+          {/* <Payment /> */}
           <Actions>
               <Btn onClick={this.prev}>Prev</Btn>
+              <Btn onClick={this.confirm}>Confirm</Btn>
             </Actions>
         </TabContent>
 
@@ -117,7 +154,7 @@ class App extends Component {
 
 export default App;
 
-const getStepStatus = (step: number, current: number): string => {
+const getStepStatus = (step, current) => {
   if (step > current) {
     return 'finish';
   }
@@ -162,6 +199,10 @@ const Title = styled.h1`
   padding: 15px 0 30px;
 `;
 
+const TitleRes = styled.h2`
+  text-align: center;
+`;
+
 const Item = styled.div`
   margin: 20px;
   text-align: center;
@@ -203,4 +244,8 @@ const Actions = styled.div`
 
 const TabContent = styled.div`
   display: ${props => props.visible ? 'block' : 'none'};
+`;
+
+const Row = styled.div`
+  margin: 15px 5px;
 `;
