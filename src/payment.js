@@ -52,6 +52,9 @@ class Payment extends Component {
       .then(result => {
         console.log('tx result', result);
       })
+      .catch(error => {
+        console.error(error);
+      })
   };
 
   handleMeta = () => {
@@ -87,19 +90,19 @@ class Payment extends Component {
 
     // eslint-disable-next-line
     const userAccount = await multiWeb3.eth.getAccounts();
-    // console.log(userAccount);
-    // console.log(multiWeb3);
+    console.log(userAccount);
+    console.log(multiWeb3);
 
-    multiWeb3.eth.sendTransaction({
-      from: userAccount[0], 
-      to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
-      // eslint-disable-next-line
-      value: multiWeb3.utils.toWei('0.025', "ether")
-    }, (error, txHash) => {
-      console.log('callback');
-      console.log('error', error);
-      console.log('result', txHash);
-    })
+    // multiWeb3.eth.sendTransaction({
+    //   from: userAccount[0], 
+    //   to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
+    //   // eslint-disable-next-line
+    //   value: multiWeb3.utils.toWei('0.025', "ether")
+    // }, (error, txHash) => {
+    //   console.log('callback');
+    //   console.log('error', error);
+    //   console.log('result', txHash);
+    // })
     // .on("receipt", function(receipt) {
     //   console.log('get receipt', receipt);
     // })
@@ -207,7 +210,7 @@ class Payment extends Component {
           <Btn onClick={this.handleMeta} disabled={!this.isValidData}>ETH by MetaMask</Btn>
         </div> */}
         <div>
-          <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy</Btn>
+          <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Send ETH by Multi</Btn>
         </div>
         {/* <div>
           <Btn onClick={this.handleEOSScatter} disabled={!this.isValidData}>EOS by Scatter</Btn>
