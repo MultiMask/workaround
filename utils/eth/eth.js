@@ -18,7 +18,7 @@ class Engine {
     }
 
     getPrivKeyFromSeed(seed) {
-        return Buffer.from(ethUtil.sha3(seed), 'hex')
+        return Buffer.from(ethUtil.keccak(seed), 'hex')
     }
 
     getEthereumAddress(PrivKey) {

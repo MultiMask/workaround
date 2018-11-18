@@ -1,11 +1,34 @@
 const inspect = require('util').inspect;
 const Eos = require('eosjs');
 const {ecc, Fcbuffer} = Eos.modules;
+const bip39 = require('bip39');
+const hdkey = require('hdkey');
+const wif = require('wif');
+
+// const mnemonic = bip39.generateMnemonic();
+const mnemonic = 'gesture neck key scrub shallow slot neutral suit awful spot organ family';
+const seed = bip39.mnemonicToSeed(mnemonic);
+
+console.log('MNEMONIC: ', mnemonic);
+console.log('SEED: ', seed.toString('hex'));
+
+const root = hdkey.fromMasterSeed(seed);
+console.log(root);
+
+const child = root.derive("m/44'/1/0'/0/0");
+console.log(child.privateKey);
+
+const private = wif.encode(128, child.privateKey, false);
+console.log(private);
+
+// const public = ecc.PublicKey(child.publicKey).toString();
+const public = ecc.privateToPublic(private);
+console.log(public);
 
 async function init() {
   // Create Private Key
   // const privateKey = await ecc.randomKey();
-  const privateKey = '5JUebM8a8Rd29zcppXMCp5N1MkVjysuDW3HJHgWJ3APcmNuU2LH';
+  // const privateKey = '5JUebM8a8Rd29zcppXMCp5N1MkVjysuDW3HJHgWJ3APcmNuU2LH';
   let public,
     account;
 
@@ -92,4 +115,4 @@ async function init() {
   console.log(tr);
 }
 
-init();
+// init();

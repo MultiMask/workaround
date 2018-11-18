@@ -52,6 +52,9 @@ class Payment extends Component {
       .then(result => {
         console.log('tx result', result);
       })
+      .catch(error => {
+        console.error(error);
+      })
   };
 
   handleMeta = () => {
