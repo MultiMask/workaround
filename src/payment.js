@@ -14,7 +14,7 @@ const networkEOS = {
 };
 
 let localWeb3,
-  multiWeb3;
+  crypto33;
 
 let identity,
   currentAccount;
@@ -35,7 +35,7 @@ class Payment extends Component {
   }
 
   handleBTC = () => {
-    const btc = window.multiWeb.btc;
+    const btc = window.crypto3.btc;
     
     btc.getAccounts()
       .then(accounts => {
@@ -83,18 +83,18 @@ class Payment extends Component {
 
   async sendByMulti() {
     // eslint-disable-next-line
-    multiWeb3 = new Web3(window.multiWeb.eth);
+    crypto33 = new Web3(window.crypto3.eth);
 
     // eslint-disable-next-line
-    const userAccount = await multiWeb3.eth.getAccounts();
+    const userAccount = await crypto33.eth.getAccounts();
     // console.log(userAccount);
-    // console.log(multiWeb3);
+    // console.log(crypto33);
 
-    multiWeb3.eth.sendTransaction({
+    crypto33.eth.sendTransaction({
       from: userAccount[0], 
       to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
       // eslint-disable-next-line
-      value: multiWeb3.utils.toWei('0.025', "ether")
+      value: crypto33.utils.toWei('0.025', "ether")
     }, (error, txHash) => {
       console.log('callback');
       console.log('error', error);
@@ -164,7 +164,7 @@ class Payment extends Component {
 
   handleEOSMulti = () => {
     // eslint-disable-next-line
-    const eos = window.multiWeb.eos(networkEOS, Eos, {
+    const eos = window.crypto3.eos(networkEOS, Eos, {
       chainId: networkEOS.chainId,
       httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
     }, 'http');
@@ -200,18 +200,18 @@ class Payment extends Component {
   render() {
     return (
       <div>
-        <div>
+        {/* <div>
           <Btn onClick={this.handleBTC} disabled={!this.isValidData}>Buy</Btn>
-        </div>
+        </div> */}
         {/* <div>
           <Btn onClick={this.handleMeta} disabled={!this.isValidData}>ETH by MetaMask</Btn>
         </div> */}
         <div>
-          <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy</Btn>
+          <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy ETH by Multi</Btn>
         </div>
-        {/* <div>
+        <div>
           <Btn onClick={this.handleEOSScatter} disabled={!this.isValidData}>EOS by Scatter</Btn>
-        </div> */}
+        </div>
         <div>
           <Btn onClick={this.handleEOSMulti} disabled={!this.isValidData}>EOS by MultiMask</Btn>
         </div>

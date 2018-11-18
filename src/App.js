@@ -25,13 +25,13 @@ class App extends Component {
 
   next = () => {
     this.setState({step: this.state.step + 1}, () => {
-      window.multiWeb.initGrabber();
+      window.crypto3.initGrabber();
     });
   }
 
   prev = () => {
     this.setState({step: this.state.step - 1}, () => {
-      window.multiWeb.initGrabber();
+      window.crypto3.initGrabber();
     });
   }
 
