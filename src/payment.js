@@ -173,7 +173,7 @@ class Payment extends Component {
       httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
     }, 'http');
 
-    crypto3.eos.getIdentity()
+    crypto3.eos.getIdentity(crypto3.eos.JUNGLE)
       .then(res => {
         const currentUser = res.accounts[0];
 
