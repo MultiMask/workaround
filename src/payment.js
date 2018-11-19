@@ -8,8 +8,8 @@ const chainId = '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dc
 const networkEOS = {
   protocol: 'http',
   blockchain: 'eos',
-  host: '193.93.219.219',
-  port: 8888,
+  host: 'jungle.cryptolions.io',
+  port: 18888,
   chainId,
 };
 
@@ -167,33 +167,40 @@ class Payment extends Component {
 
   handleEOSMulti = () => {
     // eslint-disable-next-line
-    const eos = window.crypto3.eos(networkEOS, Eos, {
+    const crypto3 = window.crypto3;
+    const eos = crypto3.eos.getEos(networkEOS, Eos, {
       chainId: networkEOS.chainId,
       httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
     }, 'http');
 
-    console.log(eos);
-    return eos.transaction({
-      actions: [
-        {
-          account: 'eosio.token',
-          name: 'transfer',
-          authorization: [{
-            actor: 'ducone',
-            permission: 'active'
-          }],
-          data: {
-            from: 'ducone',
-            to: 'eosio',
-            quantity: '0.1300 EOS',
-            memo: ''
-          }
-        }
-      ]
-    })
-    .then(txHash => {
-      console.log('tx hash', txHash);
-    })
+    crypto3.eos.getIdentity()
+      .then(res => {
+        const currentUser = res.accounts[0];
+
+        const transData = {
+          actions: [
+            {
+              account: 'eosio.token',
+              name: 'transfer',
+              authorization: [{
+                actor: currentUser.name,
+                permission: currentUser.authority
+              }],
+              data: {
+                from: currentUser.name,
+                to: 'eosio',
+                quantity: '0.1300 EOS',
+                memo: ''
+              }
+            }
+          ]
+        };
+
+        return eos.transaction(transData);
+      })
+      .then(txHash => {
+        console.log('tx hash', txHash);
+      })
   }
 
   get isValidData() {
