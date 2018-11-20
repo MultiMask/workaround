@@ -14,7 +14,7 @@ const networkEOS = {
 };
 
 let localWeb3,
-  crypto33;
+  web3;
 
 let identity,
   currentAccount;
@@ -86,18 +86,18 @@ class Payment extends Component {
 
   async sendByMulti() {
     // eslint-disable-next-line
-    crypto33 = new Web3(window.crypto3.eth);
-
+    web3 = new Web3(window.crypto3.eth.getProvider(3));
+    
     // eslint-disable-next-line
-    const userAccount = await crypto33.eth.getAccounts();
+    const userAccount = await web3.eth.getAccounts();
     // console.log(userAccount);
     // console.log(crypto33);
-
-    crypto33.eth.sendTransaction({
+// eslint-disable-next-line
+    web3.eth.sendTransaction({
       from: userAccount[0], 
-      to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
+      to: '0xc64cea908a2734bdde3e8e14f6a0b47d6c28004a', 
       // eslint-disable-next-line
-      value: crypto33.utils.toWei('0.025', "ether")
+      value: web3.utils.toWei('0.00025', "ether")
     }, (error, txHash) => {
       console.log('callback');
       console.log('error', error);
