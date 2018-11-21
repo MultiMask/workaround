@@ -210,12 +210,6 @@ class Payment extends Component {
   render() {
     return (
       <div>
-        {/* <div>
-          <Btn onClick={this.handleBTC} disabled={!this.isValidData}>Buy</Btn>
-        </div> */}
-        {/* <div>
-          <Btn onClick={this.handleMeta} disabled={!this.isValidData}>ETH by MetaMask</Btn>
-        </div> */}
         <div>
           <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy ETH by Multi</Btn>
         </div>
