@@ -57,29 +57,6 @@ class Payment extends Component {
       })
   };
 
-  handleMeta = () => {
-    this.sendByMetaMask();
-  }
-
-  async sendByMetaMask() {
-    // eslint-disable-next-line
-    localWeb3 = new Web3(web3.currentProvider);
-    
-    // eslint-disable-next-line
-    const userAccount = await localWeb3.eth.getAccounts();
-    // const userAccount = web3.eth.defaultAccount;
-
-    localWeb3.eth.sendTransaction({
-      from: userAccount, 
-      to: '0x560e36b2d58f7e71499f58f5c9269B5A3989Be4C', 
-      // eslint-disable-next-line
-      value: web3.toWei(1, "ether")
-    })
-    .on("receipt", function(receipt) {
-      console.log('get receipt', receipt);
-    })
-  }
-
   handleMulti = () => {
     this.sendByMulti();
   }
@@ -90,79 +67,17 @@ class Payment extends Component {
     
     // eslint-disable-next-line
     const userAccount = await web3.eth.getAccounts();
-    // console.log(userAccount);
-    // console.log(crypto33);
-// eslint-disable-next-line
+
+    // eslint-disable-next-line
     web3.eth.sendTransaction({
       from: userAccount[0], 
       to: '0xc64cea908a2734bdde3e8e14f6a0b47d6c28004a', 
       // eslint-disable-next-line
       value: web3.utils.toWei('0.00025', "ether")
     }, (error, txHash) => {
-      console.log('callback');
       console.log('error', error);
       console.log('result', txHash);
     })
-    // .on("receipt", function(receipt) {
-    //   console.log('get receipt', receipt);
-    // })
-    // .then(txData => {
-    //   console.log('after then', txData);
-    // })
-  }
-
-  handleEOSScatter = () => {
-    console.log('start eos scatter');
-
-    // eslint-disable-next-line
-    const eos = scatter.eos(networkEOS, Eos, {
-        chainId: networkEOS.chainId,
-        httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
-    }, 'http');
-
-    // console.log(eos);
-
-    // eslint-disable-next-line
-    scatter.suggestNetwork(networkEOS)
-        .then(x => {
-          console.log('suggest network', x);
-          // eslint-disable-next-line
-          return scatter.getIdentity({ accounts: [networkEOS] })
-        })
-        .then(data => {
-          identity = data;
-          currentAccount = identity.accounts[0];
-          console.log(data);
-
-          // eslint-disable-next-line
-          return scatter.authenticate();
-        })
-        .then(data => {
-          console.log('auth > ', data);
-
-          // eslint-disable-next-line
-          return eos.transaction({
-            actions: [
-              {
-                account: 'eosio.token',
-                name: 'transfer',
-                authorization: [{
-                  actor: currentAccount.name,
-                  permission: currentAccount.authority
-            }],
-            data: {
-              from: currentAccount.name,
-              to: 'eosio',
-              quantity: '0.1200 EOS',
-              memo: ''
-            }
-              }
-            ]
-          });
-        })
-        .then(txHash => {
-          console.log('tx hash', txHash);
-        })
   }
 
   handleEOSMulti = () => {
@@ -211,13 +126,13 @@ class Payment extends Component {
     return (
       <div>
         <div>
-          <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy ETH by Multi</Btn>
+          <Btn onClick={this.handleBTC} disabled={!this.isValidData}>Buy on BTC</Btn>
         </div>
         <div>
-          <Btn onClick={this.handleEOSScatter} disabled={!this.isValidData}>EOS by Scatter</Btn>
+          <Btn onClick={this.handleMulti} disabled={!this.isValidData}>Buy on ETH</Btn>
         </div>
         <div>
-          <Btn onClick={this.handleEOSMulti} disabled={!this.isValidData}>EOS by MultiMask</Btn>
+          <Btn onClick={this.handleEOSMulti} disabled={!this.isValidData}>Buy on EOS</Btn>
         </div>
       </div>
     );
