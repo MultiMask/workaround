@@ -5,6 +5,8 @@ const bip39 = require('bip39');
 const hdkey = require('hdkey');
 const wif = require('wif');
 
+const log = data => console.log(inspect(data, true, 10, true));
+
 // const mnemonic = bip39.generateMnemonic();
 const mnemonic = 'gesture neck key scrub shallow slot neutral suit awful spot organ family';
 const seed = bip39.mnemonicToSeed(mnemonic);
@@ -28,7 +30,7 @@ console.log(public);
 async function init() {
   // Create Private Key
   // const privateKey = await ecc.randomKey();
-  // const privateKey = '5JUebM8a8Rd29zcppXMCp5N1MkVjysuDW3HJHgWJ3APcmNuU2LH';
+  const privateKey = '5JUebM8a8Rd29zcppXMCp5N1MkVjysuDW3HJHgWJ3APcmNuU2LH';
   let public,
     account;
 
@@ -40,8 +42,8 @@ async function init() {
 
   // Create instance Eosjs
   const eos = Eos({
-    keyProvider: privateKey,
-    httpEndpoint: 'http://193.93.219.219:8888',
+    // keyProvider: privateKey,
+    httpEndpoint: 'http://jungle.cryptolions.io:18888',
     chainId: chain.jungle,
   });
 
@@ -111,8 +113,51 @@ async function init() {
   // console.log(sellcpu);
 
   console.log(' -- 3.1. Send transfer');
-  const tr = await eos.transfer(account, 'eosio', '0.1000 EOS', '');
-  console.log(tr);
+  // const tr = await eos.transfer(account, 'eosio', '0.1000 EOS', '').then(res => {
+  //   console.log(res);
+  // });
+  // console.log(tr);
+
+
+  log(' -- 3.2 Sign transaction');
+  const tx = await eos.transaction({
+    actions: [
+      {
+        account: 'eosio.token',
+        name: 'transfer',
+        authorization: [{
+          actor: account,
+          permission: 'active'
+    }],
+    data: {
+      from: account,
+      to: 'eosio',
+      quantity: '1.25 EOS',
+      memo: ''
+    }
+      }
+    ]
+  },
+  {
+    authorization: `${account}@active`, //@active for activeKey, @owner for Owner key
+    //default authorizations will be calculated.
+    broadcast: false,
+    sign: false,
+  });
+
+  log(tx);
+
+  const data = tx.transaction.transaction.actions[0].data;
+  log(data);
+
+  const sig = await ecc.sign(data, privateKey);
+  log(sig);
+
+  tx.transaction.signatures.push(sig);
+  log(tx);
+
+  const txHash = await eos.pushTransaction(tx.transaction);
+  log(txHash);
 }
 
-// init();
+init();
